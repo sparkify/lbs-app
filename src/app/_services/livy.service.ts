@@ -4,7 +4,7 @@ import {Injectable} from '@angular/core';
 import {timer} from 'rxjs';
 import {delayWhen, map, retryWhen, tap} from 'rxjs/operators';
 
-import {environment} from '../../../environments/environment';
+import {environment} from '../../environments/environment';
 
 
 const HTTP_HEADERS = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8'});

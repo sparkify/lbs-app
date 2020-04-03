@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 
-import {environment} from '../../../environments/environment';
+import {environment} from '../../environments/environment';
 
 
 const MAIN_REQUEST_URL = environment.API + '/upload';
