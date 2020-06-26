@@ -12,7 +12,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  private createDDComponent(identifer: string): void {
+  createDDComponent(identifer: string): void {
 
   }
 }
