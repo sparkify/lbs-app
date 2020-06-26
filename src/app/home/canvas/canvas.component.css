@@ -1,0 +1,79 @@
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    width: 100%;
+    height: 100%;
+}
+
+/******************************* SIDEBAR ******************************/
+.sidebar {
+    background-color: white;
+    width: 100px;
+    height: 100%;
+
+    border-right: 1px solid #dddddd;
+}
+
+
+.add-buttons {
+    padding: 20px;
+}
+
+.button {
+    border-radius: 3px;
+    text-align: center;
+    padding: 5px;
+
+    cursor: grab;
+    background-color: white;
+
+    margin: 15px 0;
+
+    color: dimgrey;
+    font-size: 0.8em;
+    font-style: italic;
+
+    user-select: none; /* supported by Chrome and Opera */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+.button:hover {
+    background-color: #ffffb8;
+}
+
+.button img {
+    height: 30px;
+}
+
+/******************************* CONTAINER ******************************/
+.vis-container {
+    background-color: white;
+    background-image:
+            linear-gradient(#dddddd 2px, transparent 2px),
+            linear-gradient(90deg, #dddddd 2px, transparent 2px),
+            linear-gradient(#dddddd 1px, transparent 1px),
+            linear-gradient(90deg, #dddddd 1px, transparent 1px);
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+
+    flex-grow: 1;
+}
+
+#drag-1 {
+    width: 25%;
+    min-height: 6.5em;
+    margin: 10%;
+    background-color: #29e;
+    color: white;
+    border-radius: 0.75em;
+    padding: 4%;
+    touch-action: none;
+    user-select: none;
+    -webkit-transform: translate(0px, 0px);
+    transform: translate(0px, 0px);
+}

@@ -6,7 +6,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import { HomeComponent } from './home/home.component';
-import { SidebarComponent } from './home/sidebar/sidebar.component';
 import { CanvasComponent } from './home/canvas/canvas.component';
 import { TestCanvasComponent } from './test-canvas/test-canvas.component';
 
@@ -15,7 +14,6 @@ import { TestCanvasComponent } from './test-canvas/test-canvas.component';
     declarations: [
         AppComponent,
         HomeComponent,
-        SidebarComponent,
         CanvasComponent,
         TestCanvasComponent
     ],
