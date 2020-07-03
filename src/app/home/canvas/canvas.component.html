@@ -1,29 +1,29 @@
 <div class="wrapper">
     <div class="sidebar">
         <div class="add-buttons">
-            <div class="button z-depth-3" (click)="createDDComponent('upload')">
+            <div id="upload" class="button droppable z-depth-3" (click)="createDDComponent('upload')">
                 <img src="../../../assets/icons/icon_upload.png"/><br/>upload
             </div>
 
-            <div class="button z-depth-3" (click)="createDDComponent('union')">
+            <div id="union" class="button droppable z-depth-3" (click)="createDDComponent('union')">
                 <img src="../../../assets/icons/icon_union.png"/><br/>union
             </div>
 
-            <div class="button z-depth-3" (click)="createDDComponent('intersect')">
+            <div id="intersect" class="button droppable z-depth-3" (click)="createDDComponent('intersect')">
                 <img src="../../../assets/icons/icon_intersect.png"/><br/>intersect
             </div>
 
-            <div class="button z-depth-3" (click)="createDDComponent('filter')">
+            <div id="filter" class="button droppable z-depth-3" (click)="createDDComponent('filter')">
                 <img src="../../../assets/icons/icon_filter.png"/><br/>filter
             </div>
 
-            <div class="button z-depth-3" (click)="createDDComponent('select')">
+            <div id="select" class="button droppable z-depth-3" (click)="createDDComponent('select')">
                 <img src="../../../assets/icons/icon_select.png"/><br/>select
             </div>
 
         </div>
     </div>
-    <div class="vis-container">
+    <svg class="vis-container">
 
-    </div>
+    </svg>
 </div>

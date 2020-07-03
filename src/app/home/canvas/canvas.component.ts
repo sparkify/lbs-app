@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import interact from 'interactjs';
+import * as d3 from 'd3';
+
 
 @Component({
   selector: 'app-canvas',
@@ -13,8 +15,63 @@ export class CanvasComponent implements OnInit {
 
   ngOnInit(): void {
 
+
+    this.initDropZone();
     this.initDraggableComponents();
 
+  }
+
+  private initDropZone(): void {
+    interact('.vis-container').dropzone({
+      // only accept elements matching this CSS selector
+      accept: '.droppable',
+      // Require a 75% element overlap for a drop to be possible
+      overlap: 0.75,
+
+      // listen for drop related events:
+
+      ondropactivate: (event) => {
+        // add active dropzone feedback
+        event.target.classList.add('drop-active');
+      },
+      ondragenter: (event) => {
+        const draggableElement = event.relatedTarget;
+        const dropzoneElement = event.target;
+
+        // feedback the possibility of a drop
+        dropzoneElement.classList.add('drop-target');
+        draggableElement.classList.add('can-drop');
+        draggableElement.textContent = 'Dragged in';
+      },
+      ondragleave: (event) => {
+        // remove the drop feedback style
+        event.target.classList.remove('drop-target');
+        event.relatedTarget.classList.remove('can-drop');
+        event.relatedTarget.textContent = 'Dragged out';
+      },
+      ondrop: (event) => { // only called when dropped within area.
+
+        const buttonID = event.relatedTarget.attributes.id.nodeValue;
+        event.relatedTarget.textContent = `Dropped ${buttonID}`;
+
+        this.createSVGElement('.vis-container', buttonID);
+
+      },
+      ondropdeactivate: (event) => {
+        // remove active dropzone feedback
+        event.target.classList.remove('drop-active');
+        event.target.classList.remove('drop-target');
+      }
+    });
+  }
+
+  private createSVGElement(parent: string, id: string): void {
+    d3.select(parent).append('rect')
+        .attr('x', 100)
+        .attr('y', 100)
+        .attr('width', 200)
+        .attr('height', 200)
+        .style('fill', 'red');
   }
 
   private initDraggableComponents(): void {
@@ -49,6 +106,8 @@ export class CanvasComponent implements OnInit {
           const container = document.querySelector('.wrapper');
           container.appendChild(element);
 
+          // TODO create svg element in SVG .vis-container
+
           const { offsetTop, offsetLeft } = currentTarget;
           position.x = offsetLeft;
           position.y = offsetTop;
@@ -67,6 +126,8 @@ export class CanvasComponent implements OnInit {
 
         // Start the drag event
         interaction.start({ name: 'drag' }, event.interactable, element);
+    }).on('dragend', (event) => {
+      event.target.parentNode.removeChild(event.target);
     });
   }
 
