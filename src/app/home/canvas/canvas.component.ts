@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 
 import interact from 'interactjs';
 import * as d3 from 'd3';
@@ -7,18 +7,79 @@ import * as d3 from 'd3';
 @Component({
   selector: 'app-canvas',
   templateUrl: './canvas.component.html',
-  styleUrls: ['./canvas.component.css']
+  styleUrls: ['./canvas.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class CanvasComponent implements OnInit {
+
+  svg: any;
+  zoomGroup: any;
+  zoom: any = d3.zoom();
+
+  xScale = d3.scaleLinear();
+  yScale = d3.scaleLinear();
+  xAxis;
+  yAxis;
 
   constructor() { }
 
   ngOnInit(): void {
 
+    this.initSVG();
 
     this.initDropZone();
     this.initDraggableComponents();
 
+  }
+
+  private updateAxis(width, height): void {
+    this.xScale.domain([-1, width + 1])
+        .range([-1, width + 1]);
+    this.yScale.domain([-1, height + 1])
+        .range([-1, height + 1]);
+    this.xAxis = d3.axisBottom(this.xScale);
+    this.yAxis = d3.axisRight(this.yScale);
+  }
+
+  private initSVG(): void {
+    this.svg = d3.select('.vis-container');
+    this.zoomGroup = this.svg.append('g');
+    let svgBB;
+
+    // initial start
+    svgBB = this.svg.node().getBoundingClientRect();
+    this.updateAxis(svgBB.width, svgBB.height);
+
+    this.xAxis.ticks((svgBB.width + 2) / (svgBB.height + 2) * 10)
+        .tickSize(svgBB.height)
+        .tickPadding(8 - svgBB.height);
+    this.yAxis.ticks(10)
+        .tickSize(svgBB.width)
+        .tickPadding(8 - svgBB.width);
+
+    const gX = this.svg.append('g')
+        .attr('class', 'axis axis--x')
+        .call(this.xAxis);
+    const gY = this.svg.append('g')
+        .attr('class', 'axis axis--y')
+        .call(this.yAxis);
+
+    this.zoom.scaleExtent([-10, 40])
+    // .translateExtent([[-100, -100], [width + 90, height + 100]])
+        .on('zoom', () => {
+          this.zoomGroup.attr('transform', d3.event.transform);
+          gX.call(this.xAxis.scale(d3.event.transform.rescaleX(this.xScale)));
+          gY.call(this.yAxis.scale(d3.event.transform.rescaleY(this.yScale)));
+        });
+
+    this.svg.call(this.zoom);
+
+    window.onresize = () => {
+      svgBB = this.svg.node().getBoundingClientRect();
+      this.updateAxis(svgBB.width, svgBB.height);
+      gX.call(this.xAxis);
+      gY.call(this.yAxis);
+    };
   }
 
   private initDropZone(): void {
@@ -66,12 +127,23 @@ export class CanvasComponent implements OnInit {
   }
 
   private createSVGElement(parent: string, id: string): void {
-    d3.select(parent).append('rect')
-        .attr('x', 100)
-        .attr('y', 100)
+    this.zoomGroup.append('rect')
+        .attr('x', 200)
+        .attr('y', 200)
         .attr('width', 200)
         .attr('height', 200)
-        .style('fill', 'red');
+        .style('fill', 'red')
+        .call(d3.drag()
+            .on('start', function() {
+              d3.select(<any> this).raise();
+            })
+            .on('drag', function() {
+              // console.log(d3.event.x);
+              d3.select(this).attr('x', +d3.select(this).attr('x') + d3.event.dx).attr('y', +d3.select(this).attr('y') + d3.event.dy);
+            })
+            .on('end', function() {
+              // ignore
+            }));
   }
 
   private initDraggableComponents(): void {
