@@ -30,6 +30,27 @@ export class CanvasComponent implements OnInit {
     this.initDropZone();
     this.initDraggableComponents();
 
+    // const _self = this;
+    // this.svg
+    //     .on('mousemove', function() {
+    //       const coords = d3.mouse(d3.event.currentTarget); // svg coordinates for the mouse
+    //       // console.log(_self.getSVGCoordinates(coords));
+    //       // console.log(window.event.pageX, window.event.pageY);
+    //     });
+
+    // let bbRect = this.svg.node().getBoundingClientRect();
+    // let offsetX = bbRect.x;
+    // let offsetY = bbRect.y;
+    //
+    // console.log(this.svg.node().getBoundingClientRect());
+    // console.log(this.getSVGCoordinates([0, 0]));
+
+  }
+
+  private getSVGCoordinates(coords: any): any {
+    const zoomTransform = d3.zoomTransform(this.svg.node());
+    const svgCoords = zoomTransform.invert(coords);
+    return {x: Math.round(svgCoords[0]), y: Math.round(svgCoords[1])};
   }
 
   private updateAxis(width, height): void {
@@ -64,7 +85,7 @@ export class CanvasComponent implements OnInit {
         .attr('class', 'axis axis--y')
         .call(this.yAxis);
 
-    this.zoom.scaleExtent([-10, 40])
+    this.zoom.scaleExtent([0.1, 1])
     // .translateExtent([[-100, -100], [width + 90, height + 100]])
         .on('zoom', () => {
           this.zoomGroup.attr('transform', d3.event.transform);
@@ -115,7 +136,15 @@ export class CanvasComponent implements OnInit {
         const buttonID = event.relatedTarget.attributes.id.nodeValue;
         event.relatedTarget.textContent = `Dropped ${buttonID}`;
 
-        this.createSVGElement('.vis-container', buttonID);
+
+        // get bounding box of the svg
+        const bbRect = this.svg.node().getBoundingClientRect();
+        const offsetX = bbRect.x;
+        const offsetY = bbRect.y;
+        // get global mouse position
+        const pXY = (window.event) as MouseEvent;
+
+        this.createSVGElement('.vis-container', buttonID, this.getSVGCoordinates([pXY.pageX - offsetX, pXY.pageY - offsetY]));
 
       },
       ondropdeactivate: (event) => {
@@ -126,10 +155,10 @@ export class CanvasComponent implements OnInit {
     });
   }
 
-  private createSVGElement(parent: string, id: string): void {
+  private createSVGElement(parent: string, id: string, coords: any): void {
     this.zoomGroup.append('rect')
-        .attr('x', 200)
-        .attr('y', 200)
+        .attr('x', coords.x)
+        .attr('y', coords.y)
         .attr('width', 200)
         .attr('height', 200)
         .style('fill', 'red')
