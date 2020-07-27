@@ -8,14 +8,15 @@ import {AppComponent} from './app.component';
 import { HomeComponent } from './home/home.component';
 import { CanvasComponent } from './home/canvas/canvas.component';
 import { TestCanvasComponent } from './test-canvas/test-canvas.component';
-
+import { UploadFeatureComponent } from './home/features/upload-feature/upload-feature.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomeComponent,
         CanvasComponent,
-        TestCanvasComponent
+        TestCanvasComponent,
+        UploadFeatureComponent
     ],
     imports: [
         AppRoutingModule,
@@ -24,7 +25,10 @@ import { TestCanvasComponent } from './test-canvas/test-canvas.component';
         ReactiveFormsModule
     ],
     providers: [],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [
+        UploadFeatureComponent
+    ]
 })
 export class AppModule {
 }

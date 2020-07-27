@@ -1,7 +1,9 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewContainerRef, ViewEncapsulation} from '@angular/core';
 
 import interact from 'interactjs';
 import * as d3 from 'd3';
+import {DynamicComponentService} from '../../_services/dynamic-component.service';
+import {UploadFeatureComponent} from '../features/upload-feature/upload-feature.component';
 
 
 @Component({
@@ -21,7 +23,13 @@ export class CanvasComponent implements OnInit {
   xAxis;
   yAxis;
 
-  constructor() { }
+  componentCount = 0;
+
+  constructor(private dynamicComponent: DynamicComponentService,
+              private vcr: ViewContainerRef) {
+    // this.dynamicComponent.setRootViewContainerRef(this.vcr);
+    // this.dynamicComponent.addDynamicComponent('upload');
+  }
 
   ngOnInit(): void {
 
@@ -156,15 +164,33 @@ export class CanvasComponent implements OnInit {
   }
 
   private createSVGElement(parent: string, id: string, coords: any): void {
+    // this.zoomGroup.append('rect')
+    //     .attr('x', coords.x)
+    //     .attr('y', coords.y)
+    //     .attr('width', 200)
+    //     .attr('height', 200)
+    //     .style('fill', 'red')
+    //     .call(d3.drag()
+    //         .on('start', function() {
+    //           d3.select(<any> this).raise();
+    //         })
+    //         .on('drag', function() {
+    //           // console.log(d3.event.x);
+    //           d3.select(this).attr('x', +d3.select(this).attr('x') + d3.event.dx).attr('y', +d3.select(this).attr('y') + d3.event.dy);
+    //         })
+    //         .on('end', function() {
+    //           // ignore
+    //         }));
+
     this.zoomGroup.append('rect')
         .attr('x', coords.x)
         .attr('y', coords.y)
         .attr('width', 200)
         .attr('height', 200)
-        .style('fill', 'red')
+        .style('fill', 'whitesmoke')
         .call(d3.drag()
             .on('start', function() {
-              d3.select(<any> this).raise();
+              // d3.select(<any> this).raise();
             })
             .on('drag', function() {
               // console.log(d3.event.x);
@@ -173,6 +199,17 @@ export class CanvasComponent implements OnInit {
             .on('end', function() {
               // ignore
             }));
+    const fo = this.zoomGroup.append('foreignObject')
+        .attr('x', coords.x)
+        .attr('y', coords.y + 20)
+        .attr('height', 200 - 20)
+        .attr('width', 200);
+    const div = fo.append('xhtml:div')
+        .attr('id', `component_${this.componentCount}`);
+
+
+    this.dynamicComponent.addComponentToId(UploadFeatureComponent, `component_${this.componentCount}`);
+    this.componentCount++;
   }
 
   private initDraggableComponents(): void {
