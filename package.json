@@ -32,7 +32,7 @@
         "express": "^4.17.1",
         "express-form-data": "^2.0.11",
         "express-validator": "^6.4.0",
-        "got": "^10.6.0",
+        "got": "^11.8.5",
         "interactjs": "^1.9.7",
         "jsonwebtoken": "^8.5.1",
         "morgan": "^1.9.1",
